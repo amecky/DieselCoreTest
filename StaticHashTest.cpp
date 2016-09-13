@@ -2,7 +2,7 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include <stdio.h>
-#include <string\StaticHash.h>
+#include <core\string\StaticHash.h>
 
 TEST_CASE("Hash generation", "[StaticHash]") {
 	StaticHash h = SID("Hello world");
