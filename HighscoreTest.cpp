@@ -65,10 +65,6 @@ TEST_CASE("HighscoreService_Load", "[HighscoreService]") {
 TEST_CASE("HighscoreService_LoadInsert", "[HighscoreService]") {
 	ds::HighscoreService<Highscore> service;
 	service.load("Test.scr");
-	for (int i = 0; i < service.size(); ++i) {
-		const Highscore& current = service.get(i);
-		printf("%d = %d:%d\n", i, current.minutes, current.seconds);
-	}
 	REQUIRE(10 == service.size());
 	Highscore h(90, 20, 0);
 	int ret = service.add(h);
