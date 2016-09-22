@@ -184,12 +184,12 @@ TEST_CASE("VM_Basic9", "[VM]") {
 TEST_CASE("VM_Basic10", "[VM]") {
 	init_logger(LogTypes::LT_FILE, 0, 0);
 	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
-	char* txt = "R1 = 10.0;\nR1 = SAT(R1);";
+	char* txt = "R1 = 10.0;\nR1 = SAT(R1);\nR2 = R1 * 4.0;";
 	ds::vm::Script* ctx = new ds::vm::Script("Test");
 	ctx->parse(txt);
 	const ds::vm::Method& m = ctx->getMethod(SID("default"));
-	ctx->execute();
-	REQUIRE(1.0f == ctx->getRegister(1).x);
+	ctx->execute(m);
+	REQUIRE(4.0f == ctx->getRegister(2).x);
 	delete ctx;
 	delete ds::gDefaultMemory;
 }
@@ -215,6 +215,18 @@ TEST_CASE("VM_Function2", "[VM]") {
 	const ds::vm::Method& m = ctx->getMethod(SID("next"));
 	ctx->execute(SID("next"));
 	REQUIRE(3.0f == ctx->getRegister(2).x);
+	delete ctx;
+	delete ds::gDefaultMemory;
+}
+
+TEST_CASE("VM_Function3", "[VM]") {
+	init_logger(LogTypes::LT_FILE, 0, 0);
+	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
+	char* txt = "function wiggle() {\nR1 = 4.0;\nR2 = CLM(R1,0.0,2.0);\nR3 = R2 * 5.0\n}";
+	ds::vm::Script* ctx = new ds::vm::Script("Test");
+	ctx->parse(txt);
+	ctx->execute(SID("wiggle"));
+	REQUIRE(10.0f == ctx->getRegister(3).x);
 	delete ctx;
 	delete ds::gDefaultMemory;
 }
