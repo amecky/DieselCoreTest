@@ -206,6 +206,7 @@ TEST_CASE("VM_Function1", "[VM]") {
 	delete ctx;
 	delete ds::gDefaultMemory;
 }
+
 TEST_CASE("VM_Function2", "[VM]") {
 	init_logger(LogTypes::LT_FILE, 0, 0);
 	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
@@ -227,6 +228,66 @@ TEST_CASE("VM_Function3", "[VM]") {
 	ctx->parse(txt);
 	ctx->execute(SID("wiggle"));
 	REQUIRE(10.0f == ctx->getRegister(3).x);
+	delete ctx;
+	delete ds::gDefaultMemory;
+}
+
+TEST_CASE("VM_Function4", "[VM]") {
+	init_logger(LogTypes::LT_FILE, 0, 0);
+	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
+	char* txt = "function wiggle() {\nR1 = 4.0;\nR2 = TWN(0,1.0,2.0,0.5,1.0);\n}";
+	ds::vm::Script* ctx = new ds::vm::Script("Test");
+	ctx->parse(txt);
+	ctx->execute(SID("wiggle"));
+	REQUIRE(1.5f == ctx->getRegister(2).x);
+	delete ctx;
+	delete ds::gDefaultMemory;
+}
+
+TEST_CASE("VM_Basic11", "[VM]") {
+	init_logger(LogTypes::LT_FILE, 0, 0);
+	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
+	char* txt = "R1 = (1.0,2.0,3.0,4.0);";
+	ds::vm::Script* ctx = new ds::vm::Script("Test");
+	ctx->parse(txt);
+	const ds::vm::Method& m = ctx->getMethod(SID("default"));
+	ctx->execute(m);
+	REQUIRE(1.0f == ctx->getRegister(1).x);
+	REQUIRE(2.0f == ctx->getRegister(1).y);
+	REQUIRE(3.0f == ctx->getRegister(1).z);
+	REQUIRE(4.0f == ctx->getRegister(1).w);
+	delete ctx;
+	delete ds::gDefaultMemory;
+}
+
+TEST_CASE("VM_Basic12", "[VM]") {
+	init_logger(LogTypes::LT_FILE, 0, 0);
+	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
+	char* txt = "R1 = (1.0,2.0,3.0,4.0) + (10.0,20.0,30.0,40.0);";
+	ds::vm::Script* ctx = new ds::vm::Script("Test");
+	ctx->parse(txt);
+	const ds::vm::Method& m = ctx->getMethod(SID("default"));
+	ctx->execute(m);
+	REQUIRE(11.0f == ctx->getRegister(1).x);
+	REQUIRE(22.0f == ctx->getRegister(1).y);
+	REQUIRE(33.0f == ctx->getRegister(1).z);
+	REQUIRE(44.0f == ctx->getRegister(1).w);
+	delete ctx;
+	delete ds::gDefaultMemory;
+}
+
+TEST_CASE("VM_Basic13", "[VM]") {
+	init_logger(LogTypes::LT_FILE, 0, 0);
+	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
+	char* txt = "OUT = (1.0,2.0,3.0,4.0) + (10.0,20.0,30.0,40.0);";
+	ds::vm::Script* ctx = new ds::vm::Script("Test");
+	ctx->parse(txt);
+	const ds::vm::Method& m = ctx->getMethod(SID("default"));
+	v4 r = ctx->execute(m);
+	REQUIRE(11.0f == r.x);
+	REQUIRE(22.0f == r.y);
+	REQUIRE(33.0f == r.z);
+	REQUIRE(44.0f == r.w);
 	delete ctx;
 	delete ds::gDefaultMemory;
 }
