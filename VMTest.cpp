@@ -249,10 +249,8 @@ TEST_CASE("VM_Function5", "[VM]") {
 	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
 	char* txt = "function wiggle {\nR1 = 4.0;\nR2 = TWN(0,1.0,2.0,0.5,1.0);\n}";
 	ds::vm::Script* ctx = new ds::vm::Script("Test");
-	bool ret = ctx->parse(txt);
-	REQUIRE(ret == false);
-	ctx->execute(SID("wiggle"));
-	REQUIRE(1.5f == ctx->getRegister(2).x);
+	ds::vm::ParserStatus ret = ctx->parse(txt);
+	REQUIRE(ret == ds::vm::ParserStatus::PS_INVALID_FUNCTION);
 	delete ctx;
 	delete ds::gDefaultMemory;
 }
@@ -318,6 +316,39 @@ TEST_CASE("VM_Basic14", "[VM]") {
 	REQUIRE(0.0f == ctx->getRegister(1).y);
 	REQUIRE(0.0f == ctx->getRegister(1).z);
 	REQUIRE(0.0f == ctx->getRegister(1).w);
+	delete ctx;
+	delete ds::gDefaultMemory;
+}
+
+TEST_CASE("VM_Basic15", "[VM]") {
+	init_logger(LogTypes::LT_FILE, 0, 0);
+	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
+	char* txt = "R1 (1.0,2.0,3.0,4.0) + (10.0,20.0,30.0,40.0);";
+	ds::vm::Script* ctx = new ds::vm::Script("Test");
+	ds::vm::ParserStatus status = ctx->parse(txt);
+	REQUIRE(status == ds::vm::ParserStatus::PS_MISSING_ASSIGNMENT);
+	delete ctx;
+	delete ds::gDefaultMemory;
+}
+
+TEST_CASE("VM_Basic16", "[VM]") {
+	init_logger(LogTypes::LT_FILE, 0, 0);
+	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
+	char* txt = "ABC = (1.0,2.0,3.0,4.0) + (10.0,20.0,30.0,40.0);";
+	ds::vm::Script* ctx = new ds::vm::Script("Test");
+	ds::vm::ParserStatus status = ctx->parse(txt);
+	REQUIRE(status == ds::vm::ParserStatus::PS_UNKNOWN_REGISTER_TYPE);
+	delete ctx;
+	delete ds::gDefaultMemory;
+}
+
+TEST_CASE("VM_Basic17", "[VM]") {
+	init_logger(LogTypes::LT_FILE, 0, 0);
+	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
+	char* txt = "R1 = (1.0,2.0,3.0;";
+	ds::vm::Script* ctx = new ds::vm::Script("Test");
+	ds::vm::ParserStatus status = ctx->parse(txt);
+	REQUIRE(status == ds::vm::ParserStatus::PS_WRONG_V4_DEFINITION);
 	delete ctx;
 	delete ds::gDefaultMemory;
 }
