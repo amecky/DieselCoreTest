@@ -15,7 +15,7 @@ TEST_CASE("VM_Basic", "[VM]") {
 	const ds::vm::Method& m = ctx->getMethod(SID("default"));
 	REQUIRE(1 == m.lines.size());
 	const ds::vm::Line& line = m.lines[0];
-	REQUIRE(1 == line.register_index);
+	REQUIRE(1 == line.register_index.index);
 	REQUIRE(line.operation == ds::vm::Operation::OP_DIV);
 	delete ctx;
 	//delete[] txt;
@@ -32,7 +32,7 @@ TEST_CASE("VM_Basic1", "[VM]") {
 	const ds::vm::Method& m = ctx->getMethod(SID("default"));
 	REQUIRE(1 == m.lines.size());
 	const ds::vm::Line& line = m.lines[0];
-	REQUIRE(1 == line.register_index);
+	REQUIRE(1 == line.register_index.index);
 	REQUIRE(line.operation == ds::vm::Operation::OP_NONE);
 	ctx->execute();
 	REQUIRE(4.0f == ctx->getRegister(1).x);
@@ -50,7 +50,7 @@ TEST_CASE("VM_Basic2", "[VM]") {
 	const ds::vm::Method& m = ctx->getMethod(SID("default"));
 	REQUIRE(1 == m.lines.size());
 	const ds::vm::Line& line = m.lines[0];
-	REQUIRE(1 == line.register_index);
+	REQUIRE(1 == line.register_index.index);
 	REQUIRE(line.operation == ds::vm::Operation::OP_PLUS);
 	ctx->execute();
 	REQUIRE(12.0f == ctx->getRegister(1).x);
@@ -68,7 +68,7 @@ TEST_CASE("VM_Basic3", "[VM]") {
 	const ds::vm::Method& m = ctx->getMethod(SID("default"));
 	REQUIRE(2 == m.lines.size());
 	const ds::vm::Line& line = m.lines[1];
-	REQUIRE(2 == line.register_index);
+	REQUIRE(2 == line.register_index.index);
 	REQUIRE(line.operation == ds::vm::Operation::OP_DIV);
 	ctx->execute();
 	REQUIRE(6.0f == ctx->getRegister(2).x);
@@ -87,7 +87,7 @@ TEST_CASE("VM_Basic4", "[VM]") {
 	const ds::vm::Method& m = ctx->getMethod(SID("default"));
 	REQUIRE(1 == m.lines.size());
 	const ds::vm::Line& line = m.lines[0];
-	REQUIRE(1 == line.register_index);
+	REQUIRE(1 == line.register_index.index);
 	REQUIRE(line.operation == ds::vm::Operation::OP_PLUS);
 	ctx->execute();
 	REQUIRE(5.0f == ctx->getRegister(1).x);
@@ -106,7 +106,7 @@ TEST_CASE("VM_Basic5", "[VM]") {
 	const ds::vm::Method& m = ctx->getMethod(SID("default"));
 	REQUIRE(1 == m.lines.size());
 	const ds::vm::Line& line = m.lines[0];
-	REQUIRE(1 == line.register_index);
+	REQUIRE(1 == line.register_index.index);
 	REQUIRE(line.operation == ds::vm::Operation::OP_PLUS);
 	ctx->execute();
 	REQUIRE(5.0f == ctx->getRegister(1).x);
@@ -123,7 +123,7 @@ TEST_CASE("VM_Basic6", "[VM]") {
 	const ds::vm::Method& m = ctx->getMethod(SID("default"));
 	REQUIRE(3 == m.lines.size());
 	const ds::vm::Line& line = m.lines[2];
-	REQUIRE(3 == line.register_index);
+	REQUIRE(3 == line.register_index.index);
 	REQUIRE(line.operation == ds::vm::Operation::OP_PLUS);
 	ctx->execute();
 	REQUIRE(8.0f == ctx->getRegister(3).x);
@@ -141,7 +141,7 @@ TEST_CASE("VM_Basic7", "[VM]") {
 	const ds::vm::Method& m = ctx->getMethod(SID("default"));
 	REQUIRE(1 == m.lines.size());
 	const ds::vm::Line& line = m.lines[0];
-	REQUIRE(1 == line.register_index);
+	REQUIRE(1 == line.register_index.index);
 	REQUIRE(line.operation == ds::vm::Operation::OP_MUL);
 	ctx->set(0, v4(HALF_PI));
 	ctx->execute();
@@ -159,7 +159,7 @@ TEST_CASE("VM_Basic8", "[VM]") {
 	const ds::vm::Method& m = ctx->getMethod(SID("default"));
 	REQUIRE(1 == m.lines.size());
 	const ds::vm::Line& line = m.lines[0];
-	REQUIRE(1 == line.register_index);
+	REQUIRE(1 == line.register_index.index);
 	REQUIRE(line.operation == ds::vm::Operation::OP_MUL);
 	ctx->execute();
 	REQUIRE(4.0f == ctx->getRegister(1).x);
@@ -288,6 +288,23 @@ TEST_CASE("VM_Basic13", "[VM]") {
 	REQUIRE(22.0f == r.y);
 	REQUIRE(33.0f == r.z);
 	REQUIRE(44.0f == r.w);
+	delete ctx;
+	delete ds::gDefaultMemory;
+}
+
+TEST_CASE("VM_Basic14", "[VM]") {
+	init_logger(LogTypes::LT_FILE, 0, 0);
+	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
+	char* txt = "R1[0] = (1.0,2.0,3.0,4.0) + (10.0,20.0,30.0,40.0);";
+	ds::vm::Script* ctx = new ds::vm::Script("Test");
+	ctx->parse(txt);
+	const ds::vm::Method& m = ctx->getMethod(SID("default"));
+	REQUIRE(1 == m.lines.size());
+	ctx->execute(m);
+	REQUIRE(11.0f == ctx->getRegister(1).x);
+	REQUIRE(0.0f == ctx->getRegister(1).y);
+	REQUIRE(0.0f == ctx->getRegister(1).z);
+	REQUIRE(0.0f == ctx->getRegister(1).w);
 	delete ctx;
 	delete ds::gDefaultMemory;
 }
