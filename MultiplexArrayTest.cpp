@@ -48,3 +48,23 @@ TEST_CASE("MultiplexArray_Basic3", "[MultiplexArray]") {
 	delete array;
 	delete ds::gDefaultMemory;
 }
+
+TEST_CASE("MultiplexArray_Basic4", "[MultiplexArray]") {
+	init_logger(LogTypes::LT_FILE, 0, 0);
+	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
+	ds::MultiplexArray* array = new ds::MultiplexArray(4);
+	ID ids[10];
+	for (int i = 0; i < 10; ++i) {
+		ids[i] = array->add();
+		array->set(ids[i], 0, v4(i * 10.0f));
+	}
+	for (int i = 0; i < 5; ++i) {
+		array->remove(ids[i * 2]);
+	}
+	v4* p = array->getPtr(0);
+	for (int i = 0; i < array->size(); ++i) {
+		printf("%d = %g\n", i, p[i].x);
+	}
+	delete array;
+	delete ds::gDefaultMemory;
+}
