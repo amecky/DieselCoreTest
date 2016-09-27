@@ -61,10 +61,23 @@ TEST_CASE("MultiplexArray_Basic4", "[MultiplexArray]") {
 	for (int i = 0; i < 5; ++i) {
 		array->remove(ids[i * 2]);
 	}
+	ID tm = array->add();
+	array->set(tm, 0, v4(200.0f));
 	v4* p = array->getPtr(0);
+	float ar[] = { 90.0f,10.0f,50.0f,30.0f,70.0f,200.0f };
 	for (int i = 0; i < array->size(); ++i) {
-		printf("%d = %g\n", i, p[i].x);
+		REQUIRE(p[i].x == ar[i]);
 	}
+	delete array;
+	delete ds::gDefaultMemory;
+}
+
+TEST_CASE("MultiplexArray_Basic5", "[MultiplexArray]") {
+	init_logger(LogTypes::LT_FILE, 0, 0);
+	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
+	ds::MultiplexArray* array = new ds::MultiplexArray(4);
+	ID id = array->add();
+	REQUIRE(array->contains(id));
 	delete array;
 	delete ds::gDefaultMemory;
 }
