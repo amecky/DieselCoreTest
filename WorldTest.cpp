@@ -26,17 +26,17 @@ TEST_CASE("World_Basic2", "[World]") {
 	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
 	ds::World* w = new ds::World();
 	ID ids[10];
-	for (int i = 0; i < 4; ++i) {
-		// const v2& pos, const Texture& texture, int type
-		ids[i] = w->create(v2(100 + i * 20,200),math::buildTexture(i * 10,100 + i * 20,32,32),1);
+	for (int i = 0; i < 10; ++i) {
+		ids[i] = w->create(v2(100 + i * 20,200),math::buildTexture(i * 10,100 + i * 20,32,32),i);
 	}
-	
 	ds::ChannelArray* array = w->getChannelArray();
 	v3* c = (v3*)array->get_ptr(ds::WEC_POSITION);
 	ds::Texture* t = (ds::Texture*)array->get_ptr(ds::WEC_TEXTURE);
+	int* tp = (int*)array->get_ptr(ds::WEC_TYPE);
 	for (int i = 0; i < array->size; ++i) {
-		printf("%d = %g %g %g %g\n", i, t[i].rect.top, t[i].rect.left, t[i].rect.bottom, t[i].rect.right);
 		REQUIRE(100 + i * 20 == c[i].x);
+		REQUIRE(i * 10 == t[i].rect.top);
+		REQUIRE(i == tp[i]);
 	}
 	delete w;
 	delete ds::gDefaultMemory;
