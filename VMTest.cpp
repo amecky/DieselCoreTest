@@ -352,3 +352,57 @@ TEST_CASE("VM_Basic17", "[VM]") {
 	delete ctx;
 	delete ds::gDefaultMemory;
 }
+
+TEST_CASE("VM_Basic18", "[VM]") {
+	init_logger(LogTypes::LT_FILE, 0, 0);
+	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
+	char* txt = "vars {\nDT = (1.0,2.0,3.0,4.0);\n}\nR1 = 4.0 * DT;";
+	ds::vm::Script* ctx = new ds::vm::Script("Test");
+	ds::vm::ParserStatus status = ctx->parse(txt);
+	REQUIRE(status == ds::vm::ParserStatus::PS_OK);
+	const ds::vm::Method& m = ctx->getMethod(SID("default"));
+	REQUIRE(1 == m.lines.size());
+	ctx->execute(m);
+	REQUIRE(4.0f == ctx->getRegister(1).x);
+	REQUIRE(8.0f == ctx->getRegister(1).y);
+	REQUIRE(12.0f == ctx->getRegister(1).z);
+	REQUIRE(16.0f == ctx->getRegister(1).w);
+	delete ctx;
+	delete ds::gDefaultMemory;
+}
+
+TEST_CASE("VM_Basic19", "[VM]") {
+	init_logger(LogTypes::LT_FILE, 0, 0);
+	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
+	char* txt = "vars {\nDT = (1.0,2.0,3.0,4.0);\nGG = 4.0;\n}\nR1 = DT + GG;";
+	ds::vm::Script* ctx = new ds::vm::Script("Test");
+	ds::vm::ParserStatus status = ctx->parse(txt);
+	REQUIRE(status == ds::vm::ParserStatus::PS_OK);
+	const ds::vm::Method& m = ctx->getMethod(SID("default"));
+	REQUIRE(1 == m.lines.size());
+	ctx->execute(m);
+	REQUIRE(5.0f == ctx->getRegister(1).x);
+	REQUIRE(6.0f == ctx->getRegister(1).y);
+	REQUIRE(7.0f == ctx->getRegister(1).z);
+	REQUIRE(8.0f == ctx->getRegister(1).w);
+	delete ctx;
+	delete ds::gDefaultMemory;
+}
+
+TEST_CASE("VM_Basic20", "[VM]") {
+	init_logger(LogTypes::LT_FILE, 0, 0);
+	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
+	char* txt = "vars {\nDT = CLR(255.0,128.0,64.0,32.0);\n}\nR1 = DT;";
+	ds::vm::Script* ctx = new ds::vm::Script("Test");
+	ds::vm::ParserStatus status = ctx->parse(txt);
+	REQUIRE(status == ds::vm::ParserStatus::PS_OK);
+	const ds::vm::Method& m = ctx->getMethod(SID("default"));
+	REQUIRE(1 == m.lines.size());
+	ctx->execute(m);
+	REQUIRE(1.0f == ctx->getRegister(1).x);
+	REQUIRE(0.5f == ctx->getRegister(1).y);
+	REQUIRE(0.25f == ctx->getRegister(1).z);
+	REQUIRE(0.125f == ctx->getRegister(1).w);
+	delete ctx;
+	delete ds::gDefaultMemory;
+}
