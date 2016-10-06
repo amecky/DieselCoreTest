@@ -21,6 +21,8 @@ TEST_CASE("Collision1", "[World]") {
 	v3 sp = w->getPosition(sid);
 	REQUIRE(sp.x == 160.0f);
 	REQUIRE(w->hasCollisions());
+	const ds::Collision& c = w->getCollision(0);
+	REQUIRE(c.distance == 0.5f);
 	delete w;
 	delete ds::gDefaultMemory;
 
