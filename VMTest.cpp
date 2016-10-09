@@ -406,3 +406,27 @@ TEST_CASE("VM_Basic20", "[VM]") {
 	delete ctx;
 	delete ds::gDefaultMemory;
 }
+
+TEST_CASE("VM_Basic21", "[VM]") {
+	init_logger(LogTypes::LT_FILE, 0, 0);
+	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
+	char* txt = "R1 = PTH(0,0.5);";
+	ds::V3Path path;
+	path.add(0.0f, v3(0.1f, 0.1f, 0.0f));
+	path.add(0.5f, v3(1.2f, 1.2f, 0.0f));
+	path.add(0.75f, v3(0.75f, 0.75f, 0.0f));
+	path.add(1.0f, v3(1.0f, 1.0f, 0.0f));
+	ds::vm::Script* ctx = new ds::vm::Script("Test");
+	ctx->addPath(&path);
+	ds::vm::ParserStatus status = ctx->parse(txt);
+	REQUIRE(status == ds::vm::ParserStatus::PS_OK);
+	const ds::vm::Method& m = ctx->getMethod(SID("default"));
+	REQUIRE(1 == m.lines.size());
+	ctx->execute(m);
+	REQUIRE(1.2f == ctx->getRegister(1).x);
+	REQUIRE(1.2f == ctx->getRegister(1).y);
+	REQUIRE(0.0f == ctx->getRegister(1).z);
+	REQUIRE(0.0f == ctx->getRegister(1).w);
+	delete ctx;
+	delete ds::gDefaultMemory;
+}
