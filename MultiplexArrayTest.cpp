@@ -5,7 +5,7 @@
 #include <core\Common.h>
 
 TEST_CASE("MultiplexArray_Basic1", "[MultiplexArray]") {
-	init_logger(LogTypes::LT_FILE, 0, 0);
+	init_logger();
 	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
 	ds::MultiplexArray* array = new ds::MultiplexArray(4);
 	ID id = array->add();
@@ -18,7 +18,7 @@ TEST_CASE("MultiplexArray_Basic1", "[MultiplexArray]") {
 }
 
 TEST_CASE("MultiplexArray_Basic2", "[MultiplexArray]") {
-	init_logger(LogTypes::LT_FILE, 0, 0);
+	init_logger();
 	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
 	ds::MultiplexArray* array = new ds::MultiplexArray(4);
 	ID id = array->add();
@@ -33,7 +33,7 @@ TEST_CASE("MultiplexArray_Basic2", "[MultiplexArray]") {
 }
 
 TEST_CASE("MultiplexArray_Basic3", "[MultiplexArray]") {
-	init_logger(LogTypes::LT_FILE, 0, 0);
+	init_logger();
 	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
 	ds::MultiplexArray* array = new ds::MultiplexArray(4);
 	ID id = array->add();
@@ -50,7 +50,7 @@ TEST_CASE("MultiplexArray_Basic3", "[MultiplexArray]") {
 }
 
 TEST_CASE("MultiplexArray_Basic4", "[MultiplexArray]") {
-	init_logger(LogTypes::LT_FILE, 0, 0);
+	init_logger();
 	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
 	ds::MultiplexArray* array = new ds::MultiplexArray(4);
 	ID ids[10];
@@ -73,7 +73,7 @@ TEST_CASE("MultiplexArray_Basic4", "[MultiplexArray]") {
 }
 
 TEST_CASE("MultiplexArray_Basic5", "[MultiplexArray]") {
-	init_logger(LogTypes::LT_FILE, 0, 0);
+	init_logger();
 	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
 	ds::MultiplexArray* array = new ds::MultiplexArray(4);
 	ID id = array->add();

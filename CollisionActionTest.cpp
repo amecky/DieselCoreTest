@@ -4,11 +4,10 @@
 #include <core\Common.h>
 #include <core\world\World.h>
 #include <core\math\math.h>
+#include "utils.h"
 
 TEST_CASE("Collision1", "[World]") {
-	init_logger(LogTypes::LT_FILE, 0, 0);
-	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
-	ds::World* w = new ds::World();
+	ds::World* w = utils::initialize();
 	ID id = w->create(v2(100, 100), math::buildTexture(0, 0, 32, 32), 1);
 	w->attachCollider(id, ds::PST_CIRCLE, v2(20.0f, 0.0f));
 	w->moveBy(id, v3(50, 0, 0));
@@ -23,15 +22,12 @@ TEST_CASE("Collision1", "[World]") {
 	REQUIRE(w->hasCollisions());
 	const ds::Collision& c = w->getCollision(0);
 	REQUIRE(c.distance == 0.5f);
-	delete w;
-	delete ds::gDefaultMemory;
+	utils::shutdown(w);
 
 }
 
 TEST_CASE("Collision2", "[World]") {
-	init_logger(LogTypes::LT_FILE, 0, 0);
-	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
-	ds::World* w = new ds::World();
+	ds::World* w = utils::initialize();
 	ID id = w->create(v2(100, 100), math::buildTexture(0, 0, 32, 32), 1);
 	w->attachCollider(id, ds::PST_CIRCLE, v2(20.0f, 0.0f));
 	w->moveBy(id, v3(10, 0, 0));
@@ -44,15 +40,11 @@ TEST_CASE("Collision2", "[World]") {
 	v3 sp = w->getPosition(sid);
 	REQUIRE(sp.x == 190.0f);
 	REQUIRE(!w->hasCollisions());
-	delete w;
-	delete ds::gDefaultMemory;
-
+	utils::shutdown(w);
 }
 
 TEST_CASE("Collision3", "[World]") {
-	init_logger(LogTypes::LT_FILE, 0, 0);
-	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
-	ds::World* w = new ds::World();
+	ds::World* w = utils::initialize();
 	ID id = w->create(v2(100, 100), math::buildTexture(0, 0, 32, 32), 1);
 	v3 v1 = v3(50, 0, 0);
 	w->attachCollider(id, ds::PST_CIRCLE, v2(20.0f, 0.0f));
@@ -83,7 +75,6 @@ TEST_CASE("Collision3", "[World]") {
 	REQUIRE(!w->hasCollisions());
 	v3 nfp = w->getPosition(id);
 	REQUIRE(nfp.x == 95.0f);
-	delete w;
-	delete ds::gDefaultMemory;
+	utils::shutdown(w);
 
 }

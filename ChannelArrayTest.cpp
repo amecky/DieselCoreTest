@@ -5,7 +5,7 @@
 #include <core\Common.h>
 
 TEST_CASE("ChannelArray_Basic1", "[ChannelArray]") {
-	init_logger(LogTypes::LT_FILE, 0, 0);
+	init_logger();
 	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
 	ds::ChannelArray* array = new ds::ChannelArray();
 	int sizes[] = { sizeof(int), sizeof(int), sizeof(float) };
@@ -23,7 +23,7 @@ TEST_CASE("ChannelArray_Basic1", "[ChannelArray]") {
 }
 
 TEST_CASE("ChannelArray_Basic2", "[ChannelArray]") {
-	init_logger(LogTypes::LT_FILE, 0, 0);
+	init_logger();
 	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
 	ds::ChannelArray* array = new ds::ChannelArray();
 	int sizes[] = { sizeof(int), sizeof(int), sizeof(float) };
@@ -49,7 +49,7 @@ TEST_CASE("ChannelArray_Basic2", "[ChannelArray]") {
 }
 
 TEST_CASE("ChannelArray_Basic3", "[ChannelArray]") {
-	init_logger(LogTypes::LT_FILE, 0, 0);
+	init_logger();
 	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
 	ds::ChannelArray* array = new ds::ChannelArray();
 	int sizes[] = { sizeof(int), sizeof(int), sizeof(float) };
@@ -72,7 +72,7 @@ TEST_CASE("ChannelArray_Basic3", "[ChannelArray]") {
 }
 
 TEST_CASE("ChannelArray_Basic4", "[ChannelArray]") {
-	init_logger(LogTypes::LT_FILE, 0, 0);
+	init_logger();
 	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
 	ds::ChannelArray* array = new ds::ChannelArray();
 	int sizes[] = { sizeof(int), sizeof(ds::Rect), sizeof(int) };
