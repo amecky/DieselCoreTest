@@ -5,8 +5,6 @@
 #include <core\Common.h>
 
 TEST_CASE("MultiplexArray_Basic1", "[MultiplexArray]") {
-	init_logger();
-	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
 	ds::MultiplexArray* array = new ds::MultiplexArray(4);
 	ID id = array->add();
 	array->set(id, 0, v4(10.0f));
@@ -14,12 +12,9 @@ TEST_CASE("MultiplexArray_Basic1", "[MultiplexArray]") {
 	REQUIRE(r.x == 10.0f);
 	REQUIRE(array->size() == 1);
 	delete array;
-	delete ds::gDefaultMemory;
 }
 
 TEST_CASE("MultiplexArray_Basic2", "[MultiplexArray]") {
-	init_logger();
-	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
 	ds::MultiplexArray* array = new ds::MultiplexArray(4);
 	ID id = array->add();
 	array->set(id, 0, v4(10.0f));
@@ -29,12 +24,9 @@ TEST_CASE("MultiplexArray_Basic2", "[MultiplexArray]") {
 	bool con = array->contains(id);
 	REQUIRE(con == false);
 	delete array;
-	delete ds::gDefaultMemory;
 }
 
 TEST_CASE("MultiplexArray_Basic3", "[MultiplexArray]") {
-	init_logger();
-	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
 	ds::MultiplexArray* array = new ds::MultiplexArray(4);
 	ID id = array->add();
 	array->set(id, 0, v4(10.0f));
@@ -46,12 +38,9 @@ TEST_CASE("MultiplexArray_Basic3", "[MultiplexArray]") {
 	v4 r = array->get(nid, 0);
 	REQUIRE(r.x == 20.0f);
 	delete array;
-	delete ds::gDefaultMemory;
 }
 
 TEST_CASE("MultiplexArray_Basic4", "[MultiplexArray]") {
-	init_logger();
-	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
 	ds::MultiplexArray* array = new ds::MultiplexArray(4);
 	ID ids[10];
 	for (int i = 0; i < 10; ++i) {
@@ -69,15 +58,11 @@ TEST_CASE("MultiplexArray_Basic4", "[MultiplexArray]") {
 		REQUIRE(p[i].x == ar[i]);
 	}
 	delete array;
-	delete ds::gDefaultMemory;
 }
 
 TEST_CASE("MultiplexArray_Basic5", "[MultiplexArray]") {
-	init_logger();
-	ds::gDefaultMemory = new ds::DefaultAllocator(64 * 1024 * 1024);
 	ds::MultiplexArray* array = new ds::MultiplexArray(4);
 	ID id = array->add();
 	REQUIRE(array->contains(id));
 	delete array;
-	delete ds::gDefaultMemory;
 }

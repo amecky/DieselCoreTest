@@ -1,8 +1,7 @@
 #pragma comment(lib, "DieselCore.lib")
-#define CATCH_CONFIG_MAIN
-#include "catch.hpp"
 #include <stdio.h>
 #include <core\string\StaticHash.h>
+#include "catch.hpp"
 
 TEST_CASE("Hash generation", "[StaticHash]") {
 	StaticHash h = SID("Hello world");
